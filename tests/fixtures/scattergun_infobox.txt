@@ -1,0 +1,15 @@
+{{Item infobox
+| type           = weapon
+| used-by        = Scout
+| slot           = primary
+| damage         = yes
+| damage-max     = 105
+| damage-min     = 24
+| rof            = 0.625
+| reload         = 0.7
+| clip-size      = 6
+| ammo-loaded    = 6
+| ammo-carried   = 32
+| att-1-positive = On Hit: Knocks target back
+| att-2-negative = -20% damage at long range
+}}

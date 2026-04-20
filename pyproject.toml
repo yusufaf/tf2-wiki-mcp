@@ -8,11 +8,29 @@ authors = [
     { name = "Yusuf Afzal", email = "yusufafzal12@gmail.com" }
 ]
 requires-python = ">=3.11"
+keywords = ["mcp", "model-context-protocol", "tf2", "team-fortress-2", "wiki", "llm"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Games/Entertainment :: First Person Shooters",
+    "Topic :: Software Development :: Libraries",
+]
 dependencies = [
     "fastmcp>=3.2.4",
     "httpx>=0.28.1",
     "mwparserfromhell>=0.7.2",
 ]
+
+[project.urls]
+Homepage = "https://github.com/yusufaf/tf2-wiki-mcp"
+Repository = "https://github.com/yusufaf/tf2-wiki-mcp"
+Issues = "https://github.com/yusufaf/tf2-wiki-mcp/issues"
 
 [project.scripts]
 tf2-wiki-mcp = "tf2_wiki_mcp.server:main"

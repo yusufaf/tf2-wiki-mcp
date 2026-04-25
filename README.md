@@ -1,6 +1,11 @@
 # tf2-wiki-mcp
 
-An [MCP](https://modelcontextprotocol.io) server that exposes the [Team Fortress Wiki](https://wiki.teamfortress.com/) to LLM clients (Claude Desktop, Claude Code, Cursor) over stdio.
+An [MCP](https://modelcontextprotocol.io) server that exposes the [Team Fortress Wiki](https://wiki.teamfortress.com/) to LLM clients (Claude Desktop, Claude Code, Cursor, VS Code) over stdio.
+
+[![Install in VS Code](https://img.shields.io/badge/Install_in-VS_Code-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect/mcp/install?name=tf2-wiki-mcp&config=%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22tf2-wiki-mcp%22%5D%2C%22env%22%3A%7B%7D%7D)
+[![Install in VS Code Insiders](https://img.shields.io/badge/Install_in-VS_Code_Insiders-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=tf2-wiki-mcp&config=%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22tf2-wiki-mcp%22%5D%2C%22env%22%3A%7B%7D%7D&quality=insiders)
+[![Install in Visual Studio](https://img.shields.io/badge/Install_in-Visual_Studio-C16FDE?style=flat-square&logo=visualstudio&logoColor=white)](https://vs-open.link/mcp-install?%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22tf2-wiki-mcp%22%5D%2C%22env%22%3A%7B%7D%7D)
+[![Install in Cursor](https://img.shields.io/badge/Install_in-Cursor-000000?style=flat-square&logoColor=white)](https://cursor.com/en/install-mcp?name=tf2-wiki-mcp&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJ0ZjItd2lraS1tY3AiXSwiZW52Ijp7fX0=)
 
 > **Not affiliated with Valve Corporation or the Team Fortress Wiki contributors.** Team Fortress 2 is a trademark of Valve Corporation. This is unofficial fan tooling.
 
@@ -28,49 +33,135 @@ Gives an LLM live, accurate access to TF2 wiki content so it stops guessing at w
 
 Plus: resource `tf2wiki://main`, prompts `analyze_loadout` and `compare_weapons`.
 
-## Install
+## Installation
 
-Requires Python 3.11+ and [`uv`](https://docs.astral.sh/uv/).
+Requires [`uv`](https://docs.astral.sh/uv/) (which manages the Python toolchain for you). Once installed, `uvx tf2-wiki-mcp` will fetch and run the server on demand — no manual clone needed.
 
-```bash
-git clone https://github.com/yusufaf/tf2-wiki-mcp
-cd tf2-wiki-mcp
-uv sync
-```
-
-## Use with Claude Desktop
-
-Add to `claude_desktop_config.json`:
+**Standard config** works in most MCP clients:
 
 ```json
 {
   "mcpServers": {
-    "tf2-wiki": {
-      "command": "uv",
-      "args": ["run", "--directory", "/absolute/path/to/tf2-wiki-mcp", "tf2-wiki-mcp"]
+    "tf2-wiki-mcp": {
+      "command": "uvx",
+      "args": ["tf2-wiki-mcp"],
+      "env": {}
     }
   }
 }
 ```
 
-Restart Claude Desktop. The TF2 wiki tools appear in the tool picker.
+<details>
+<summary>Claude Desktop</summary>
 
-## Use with Claude Code
+Add the standard config above to `claude_desktop_config.json`:
+
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+
+Restart Claude Desktop. The TF2 wiki tools appear in the tool picker.
+</details>
+
+<details>
+<summary>Claude Code</summary>
 
 ```bash
-claude mcp add tf2-wiki uv run --directory /absolute/path/to/tf2-wiki-mcp tf2-wiki-mcp
+claude mcp add tf2-wiki-mcp -- uvx tf2-wiki-mcp
+```
+</details>
+
+<details>
+<summary>Cursor</summary>
+
+[![Install in Cursor](https://img.shields.io/badge/Install_in-Cursor-000000?style=flat-square&logoColor=white)](https://cursor.com/en/install-mcp?name=tf2-wiki-mcp&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJ0ZjItd2lraS1tY3AiXSwiZW52Ijp7fX0=)
+
+Or add the standard config to `~/.cursor/mcp.json`.
+</details>
+
+<details>
+<summary>VS Code</summary>
+
+[![Install in VS Code](https://img.shields.io/badge/Install_in-VS_Code-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect/mcp/install?name=tf2-wiki-mcp&config=%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22tf2-wiki-mcp%22%5D%2C%22env%22%3A%7B%7D%7D)
+
+Or via the VS Code CLI:
+
+```bash
+code --add-mcp '{"name":"tf2-wiki-mcp","command":"uvx","args":["tf2-wiki-mcp"],"env":{}}'
 ```
 
-## Use with Cursor
+See the [VS Code MCP guide](https://code.visualstudio.com/docs/copilot/chat/mcp-servers#_add-an-mcp-server) for details.
+</details>
 
-Similar `mcpServers` entry in `~/.cursor/mcp.json` — same shape as the Claude Desktop config above.
+<details>
+<summary>VS Code Insiders</summary>
+
+[![Install in VS Code Insiders](https://img.shields.io/badge/Install_in-VS_Code_Insiders-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=tf2-wiki-mcp&config=%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22tf2-wiki-mcp%22%5D%2C%22env%22%3A%7B%7D%7D&quality=insiders)
+
+Or via the CLI:
+
+```bash
+code-insiders --add-mcp '{"name":"tf2-wiki-mcp","command":"uvx","args":["tf2-wiki-mcp"],"env":{}}'
+```
+</details>
+
+<details>
+<summary>Visual Studio</summary>
+
+[![Install in Visual Studio](https://img.shields.io/badge/Install_in-Visual_Studio-C16FDE?style=flat-square&logo=visualstudio&logoColor=white)](https://vs-open.link/mcp-install?%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22tf2-wiki-mcp%22%5D%2C%22env%22%3A%7B%7D%7D)
+
+Or manually:
+
+1. Open the GitHub Copilot Chat window.
+2. Click the tools icon (🛠️) → **+ Add Server**.
+3. Fill in: **Server ID** `tf2-wiki-mcp`, **Type** `stdio`, **Command** `uvx`, **Arguments** `tf2-wiki-mcp`.
+4. Save.
+
+See the [Visual Studio MCP docs](https://learn.microsoft.com/visualstudio/ide/mcp-servers).
+</details>
+
+<details>
+<summary>GitHub Copilot Coding Agent</summary>
+
+```json
+{
+  "mcpServers": {
+    "tf2-wiki-mcp": {
+      "command": "uvx",
+      "args": ["tf2-wiki-mcp"],
+      "env": {},
+      "type": "local",
+      "tools": ["*"]
+    }
+  }
+}
+```
+
+Add this in repository settings under **Copilot → Coding agent**. See the [Copilot Coding Agent MCP docs](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/extend-coding-agent-with-mcp).
+</details>
 
 ## Development
 
+Run from a local clone instead of PyPI:
+
 ```bash
+git clone https://github.com/yusufaf/tf2-wiki-mcp
+cd tf2-wiki-mcp
 uv sync --dev
 uv run pytest              # offline, uses recorded cassettes
 uv run pytest --live       # also hits the real wiki
+```
+
+To point an MCP client at the local checkout:
+
+```json
+{
+  "mcpServers": {
+    "tf2-wiki-mcp": {
+      "command": "uv",
+      "args": ["run", "--directory", "/absolute/path/to/tf2-wiki-mcp", "tf2-wiki-mcp"]
+    }
+  }
+}
 ```
 
 ## Licensing & Attribution

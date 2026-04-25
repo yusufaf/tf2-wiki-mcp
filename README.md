@@ -71,11 +71,31 @@ claude mcp add tf2-wiki-mcp -- uvx tf2-wiki-mcp
 </details>
 
 <details>
+<summary>Codex</summary>
+
+Add to `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.tf2-wiki-mcp]
+command = "uvx"
+args = ["tf2-wiki-mcp"]
+```
+
+See the [Codex MCP docs](https://github.com/openai/codex/blob/main/codex-rs/config.md#mcp_servers).
+</details>
+
+<details>
 <summary>Cursor</summary>
 
 [![Install in Cursor](https://img.shields.io/badge/Install_in-Cursor-000000?style=flat-square&logoColor=white)](https://cursor.com/en/install-mcp?name=tf2-wiki-mcp&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJ0ZjItd2lraS1tY3AiXSwiZW52Ijp7fX0=)
 
 Or add the standard config to `~/.cursor/mcp.json`.
+</details>
+
+<details>
+<summary>Gemini CLI</summary>
+
+Add the standard config to your Gemini CLI `settings.json` per the [Gemini CLI MCP guide](https://github.com/google-gemini/gemini-cli/blob/main/docs/tools/mcp-server.md#configure-the-mcp-server-in-settingsjson).
 </details>
 
 <details>

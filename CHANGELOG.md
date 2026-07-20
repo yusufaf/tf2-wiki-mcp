@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/yusufaf/tf2-wiki-mcp/compare/v0.1.1...v0.1.2) (2026-07-20)
+
+
+### Documentation
+
+* add CLAUDE.md with architecture and workflow guidance ([4030206](https://github.com/yusufaf/tf2-wiki-mcp/commit/4030206c44eabe293df5c38f8c9d99df2d18d966))
+
 ## [0.1.1](https://github.com/yusufaf/tf2-wiki-mcp/compare/v0.1.0...v0.1.1) (2026-06-07)
 
 

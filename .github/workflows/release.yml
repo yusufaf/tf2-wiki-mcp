@@ -57,15 +57,25 @@ jobs:
             "$archive"
           tar xzf "$archive" mcp-publisher
       - run: ./mcp-publisher validate
-      - run: ./mcp-publisher login github-oidc
-      - name: Publish to MCP Registry
+      - name: Check server.json matches pyproject.toml
         run: |
-          set -uo pipefail
-          # PyPI's JSON API can lag the upload, so the registry's version check may fail at first.
-          for attempt in 1 2 3 4 5; do
-            ./mcp-publisher publish && exit 0
-            echo "::warning::publish attempt $attempt failed; retrying in $((attempt * 20))s"
-            sleep $((attempt * 20))
+          set -euo pipefail
+          project="$(python3 -c 'import tomllib; print(tomllib.load(open("pyproject.toml", "rb"))["project"]["version"])')"
+          server="$(jq -r .version server.json)"
+          package="$(jq -r '.packages[0].version' server.json)"
+          if [ "$server" != "$project" ] || [ "$package" != "$project" ]; then
+            echo "::error::server.json versions ($server, $package) don't match pyproject.toml ($project)"
+            exit 1
+          fi
+          echo "VERSION=$project" >> "$GITHUB_ENV"
+      - name: Wait for PyPI to serve the release
+        run: |
+          # The registry verifies against PyPI's JSON API, which can lag the upload.
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            curl -fsS -o /dev/null "https://pypi.org/pypi/tf2-wiki-mcp/${VERSION}/json" && exit 0
+            sleep 15
           done
-          echo "::error::mcp-publisher publish failed after 5 attempts"
+          echo "::error::tf2-wiki-mcp ${VERSION} not visible on PyPI after 150s"
           exit 1
+      - run: ./mcp-publisher login github-oidc
+      - run: ./mcp-publisher publish

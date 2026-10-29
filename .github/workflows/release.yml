@@ -32,3 +32,50 @@ jobs:
           name: dist
           path: dist/
       - uses: pypa/gh-action-pypi-publish@release/v1
+
+  registry:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      PUBLISHER_VERSION: v1.8.5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+      - name: Download and verify mcp-publisher
+        run: |
+          set -euo pipefail
+          archive="mcp-publisher_linux_amd64.tar.gz"
+          base="https://github.com/modelcontextprotocol/registry/releases/download/${PUBLISHER_VERSION}"
+          curl -fsSL -o "$archive" "$base/$archive"
+          curl -fsSL -o "$archive.sigstore.json" "$base/$archive.sigstore.json"
+          cosign verify-blob --bundle "$archive.sigstore.json" \
+            --certificate-identity "https://github.com/modelcontextprotocol/registry/.github/workflows/release.yml@refs/tags/${PUBLISHER_VERSION}" \
+            --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+            "$archive"
+          tar xzf "$archive" mcp-publisher
+      - run: ./mcp-publisher validate
+      - name: Check server.json matches pyproject.toml
+        run: |
+          set -euo pipefail
+          project="$(python3 -c 'import tomllib; print(tomllib.load(open("pyproject.toml", "rb"))["project"]["version"])')"
+          server="$(jq -r .version server.json)"
+          package="$(jq -r '.packages[0].version' server.json)"
+          if [ "$server" != "$project" ] || [ "$package" != "$project" ]; then
+            echo "::error::server.json versions ($server, $package) don't match pyproject.toml ($project)"
+            exit 1
+          fi
+          echo "VERSION=$project" >> "$GITHUB_ENV"
+      - name: Wait for PyPI to serve the release
+        run: |
+          # The registry verifies against PyPI's JSON API, which can lag the upload.
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            curl -fsS -o /dev/null "https://pypi.org/pypi/tf2-wiki-mcp/${VERSION}/json" && exit 0
+            sleep 15
+          done
+          echo "::error::tf2-wiki-mcp ${VERSION} not visible on PyPI after 150s"
+          exit 1
+      - run: ./mcp-publisher login github-oidc
+      - run: ./mcp-publisher publish

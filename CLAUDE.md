@@ -50,6 +50,6 @@ src/tf2_wiki_mcp/
 - `from __future__ import annotations` everywhere; modern builtin generics.
 - The `INSTRUCTIONS` string in `server.py` is prompt surface — it steers the model's tool-selection order (`search_wiki` first to discover titles, then summary or full page). Update it when tool semantics change.
 - The `USER_AGENT` embeds the version and repo URL. MediaWiki requires a descriptive UA; don't genericize it.
-- `version` lives in `pyproject.toml` and is re-exported as `__version__`. `release-please-config.json` is present — don't hand-bump. It also bumps both version fields in `server.json` (the MCP Registry listing), which `release.yml` publishes after the PyPI upload.
-- The README's `<!-- mcp-name: ... -->` marker is how the MCP Registry verifies PyPI ownership; it must match `server.json`'s `name`.
+- `version` lives in `pyproject.toml` and is re-exported as `__version__`. `release-please-config.json` is present — don't hand-bump. It also bumps both version fields in `server.json` (the MCP Registry listing), which `release.yml` publishes after the PyPI upload, and the project's own entry in `uv.lock`. That jsonpath filters on `@.name.value` because release-please's TOML parser wraps each value as `{start, end, value}`; if a release PR stops bumping `uv.lock`, check that first.
+- The README's `<!-- mcp-name: ... -->` marker is how the MCP Registry verifies PyPI ownership; it must match `server.json`'s `name`. `glama.json` claims the Glama listing — keep its `maintainers` in sync with the repo owner.
 - README carries per-client install blocks (VS Code, Cursor, Claude Desktop) with base64/URL-encoded configs. If the package name or args change, those badges all need regenerating.

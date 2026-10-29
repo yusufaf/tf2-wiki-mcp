@@ -7,7 +7,7 @@
       "extra-files": [
         { "type": "json", "path": "server.json", "jsonpath": "$.version" },
         { "type": "json", "path": "server.json", "jsonpath": "$.packages[0].version" },
-        { "type": "toml", "path": "uv.lock", "jsonpath": "$.package[?(@.source && @.source.editable)].version" }
+        { "type": "toml", "path": "uv.lock", "jsonpath": "$.package[?(@.name.value=='tf2-wiki-mcp')].version" }
       ]
     }
   }
